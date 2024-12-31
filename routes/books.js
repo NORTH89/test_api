@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { Book, validateBook } = require('../models/Book');
-const verifyToken = require('../middleware/verifyToken');
+const {verifyAdmin} = require('../middleware/verifyToken');
+
+
 // Get all books
 router.get('/', async (req, res, next) => {
     try {
@@ -23,8 +25,8 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-// Create a book
-router.post('/', async (req, res, next) => {
+// Create a book only by admin can create a book
+router.post('/',verifyAdmin ,async (req, res, next) => {
     try {
         const { error } = validateBook(req.body);
         if (error) return res.status(400).json(error.details[0].message);
@@ -41,8 +43,8 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-// Update a book
-router.put('/:id', async (req, res, next) => {
+// Update a book only by admin can update a book
+router.put('/:id',verifyAdmin, async (req, res, next) => {
     try {
         const { error } = validateBook(req.body);
         if (error) return res.status(400).json(error.details[0].message);
@@ -59,8 +61,8 @@ router.put('/:id', async (req, res, next) => {
     }
 });
 
-// Delete a book
-router.delete('/:id', async (req, res, next) => {
+// Delete a book only by admin can delete a book
+router.delete('/:id',verifyAdmin, async (req, res, next) => {
     try {
         const book = await Book.findByIdAndRemove(req.params.id);
         if (!book) return res.status(404).json('Book not found');
