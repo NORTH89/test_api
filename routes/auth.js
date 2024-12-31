@@ -39,13 +39,13 @@ router.post('/login', async (req, res, next) => {
         res.status(200).json({
             status: 'success',
             message: 'Login successful',
-            token,
             user: {
                 id: user._id,
                 name: user.name,
                 email: user.email,
                 isAdmin: user.isAdmin
             },
+            token,
         });
 
     } catch (err) {
@@ -58,6 +58,7 @@ router.post('/login', async (req, res, next) => {
 // Register a new user
 router.post('/register', async (req, res, next) => {
     try {
+
         // Validate input data التحقق من صحة البيانات المدخلة
         const { error } = validateRegisterUser(req.body);
         if (error) return res.status(400).json({
@@ -82,7 +83,6 @@ router.post('/register', async (req, res, next) => {
             name: req.body.name,
             email: req.body.email,
             password: hashedPassword,
-            isAdmin: req.body.isAdmin || false
         });
 
         await user.save();
@@ -95,7 +95,6 @@ router.post('/register', async (req, res, next) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                isAdmin: user.isAdmin
             },
             token: generateToken(user)
         });
