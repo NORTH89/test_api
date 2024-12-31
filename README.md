@@ -1,4 +1,4 @@
-# Movie App API
+# Test API
 
 This README provides instructions on how to test the Movie App API.
 
