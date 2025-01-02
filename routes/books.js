@@ -33,7 +33,10 @@ router.post('/',verifyAdmin ,async (req, res, next) => {
 
         let book = new Book({
             title: req.body.title,
-            author: req.body.author  // Now accepts string instead of ObjectId
+            author: req.body.author,
+            description: req.body.description,
+            price: req.body.price,
+            language: req.body.language,
         });
 
         book = await book.save();
@@ -51,7 +54,10 @@ router.put('/:id',verifyAdmin, async (req, res, next) => {
 
         const book = await Book.findByIdAndUpdate(req.params.id, {
             title: req.body.title,
-            author: req.body.author
+            author: req.body.author,
+            description: req.body.description,
+            price: req.body.price,
+            language: req.body.language,
         }, { new: true });
 
         if (!book) return res.status(404).json('Book not found');
