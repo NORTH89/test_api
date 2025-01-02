@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { User, validateRegisterUser, validateLoginUser } = require('../models/User');
 const bcrypt = require('bcrypt');
-const { generateToken } = require('../config/jwt');
-const { set } = require('mongoose');
-const verifyToken = require('../middleware/verifyToken');
 const SALT_ROUNDS = 10;
 
 
@@ -34,7 +31,7 @@ router.post('/login', async (req, res, next) => {
         });
 
         // Generate JWT توليد JWT
-        const token = generateToken(user);
+        const token = user.generateAuthToken();
 
         res.status(200).json({
             status: 'success',
@@ -96,7 +93,7 @@ router.post('/register', async (req, res, next) => {
                 name: user.name,
                 email: user.email,
             },
-            token: generateToken(user)
+            token: user.generateAuthToken()
         });
     } catch (err) {
         next(err);
